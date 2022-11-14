@@ -109,7 +109,7 @@ def outdated_packages_list():
         for y in pip_outdated:
             if x[0] == y[0]:
                 summary.append(f"{y[0]} - {y[1]} - {y[2]}")
-    print(summary)
+
     return summary
 
 

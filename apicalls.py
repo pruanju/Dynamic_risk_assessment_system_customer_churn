@@ -20,6 +20,9 @@ response1 = requests.post(URL+'/prediction', json={'filepath': os.getcwd()+'/'+t
 response2 = requests.get(URL+'scoring').content
 response3 = requests.get(URL+'summarystats').content
 response4 = requests.get(URL+'diagnostics').content
+res1 = json.loads(response1)
+res3 = json.loads(response3)
+res4 = json.loads(response4)
 
 #combine all API responses
 #responses = #combine reponses here
@@ -28,21 +31,42 @@ with open(os.getcwd()+'/'+model_path+'/'+'apireturns.txt', 'w+') as f:
     f.write("API Responses\n")
     f.write('------------------------------------------------\n')
     f.write("Data predictions\n")
-    f.write(response1)
+    f.write(str(res1))
     f.write('\n------------------------------------------------\n')
 
     f.write("F1 score\n")
     f.write(response2)
     f.write('\n------------------------------------------------\n')
-
+ 
     f.write("Summary for each feature\n")
-    f.write("Feature - Mean - Median - Std\n")
-    f.write(response3)
+    f.write("Feature: \t\t Mean \t\t Median \t Std\n")
+    for row in res3:
+        for i in range(len(row)):
+            f.write(str(row[i]) + "\t")
+        f.write("\n")
     f.write('\n------------------------------------------------\n')
 
 
+    f.write("Missing data\n")
+    for row in res4['missing_percentage']:
+        for i in range(len(row)):
+            f.write(str(row[i]) + " ")
+        f.write("\n")
+    f.write('\n------------------------------------------------\n')
 
-    f.write(response4)
+    f.write("Execution time\n")
+    for row in res4['execution_time']:
+        for i in range(len(row)):
+            f.write(str(row[i]) + " ")
+        f.write("\n")
+    f.write('\n------------------------------------------------\n')
+
+    f.write("Outdated packages: package name - installed version - newest version\n")
+    for row in res4['outdated_packages']:
+        for i in range(len(row)):
+            f.write(str(row[i]))
+        f.write("\n")
+
     f.write('\n------------------------------------------------\n')
 
 
