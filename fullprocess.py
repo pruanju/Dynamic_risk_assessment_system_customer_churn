@@ -66,6 +66,8 @@ else:
     # Re-training the model
     logging.info("Training again the model with new data")
     os.system('python3 training.py')
+    # After training the system we update the score of the new model
+    os.system('python3 score.py')
 
 
 ##################Re-deployment
